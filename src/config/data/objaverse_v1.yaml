@@ -1,8 +1,8 @@
-root: assets/object/objaverse_v1
+root: objaverse/hf-objaverse-v1
 
-input_template: ${data.root}/raw_mesh/**.glb
+input_template: ${data.root}/glbs/*/**.glb
 
-output_template: ${data.root}/processed_data/**
+output_template: ${data.root}/processed_data/*/**
 
 output_scenecfg_template: ${data.root}/scene_cfg/**
 

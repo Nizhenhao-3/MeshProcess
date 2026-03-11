@@ -23,7 +23,7 @@ def process_single_obj(params):
             task_cfg.obj_id = obj_id
         for k, v in task_cfg.items():
             if k.endswith("_path"):
-                task_cfg[k] = os.path.abspath(v.replace("**", obj_id))
+                task_cfg[k] = os.path.abspath(v.replace("*/**", obj_id))
         try:
             eval(real_task_name)(
                 task_cfg,
@@ -46,8 +46,8 @@ def func_proc(cfg):
         and len(cfg["data"]["input_template"].split("**")) == 2
     )
     full_path_lst = glob.glob(cfg["data"]["input_template"])
-    prefix = cfg["data"]["input_template"].split("**")[0]
-    suffix = cfg["data"]["input_template"].split("**")[1]
+    prefix = cfg["data"]["input_template"].split("*")[0]
+    suffix = cfg["data"]["input_template"].split("**")[-1]
     obj_lst = [p.replace(prefix, "").replace(suffix, "") for p in full_path_lst]
 
     logging.info("#" * 30)

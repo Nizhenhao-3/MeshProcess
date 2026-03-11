@@ -206,3 +206,7 @@ output.txt
 assets/
 MUJOCO_LOG.TXT
 debug*
+third_party/ACVD/*
+objaverse/*
+vtk/*
+objaverse/

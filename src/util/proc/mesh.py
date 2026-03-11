@@ -11,9 +11,24 @@ def mesh_normalize(config):
     input_path, output_path = config["input_path"], config["output_path"]
     tm_mesh = trimesh.load(input_path, force="mesh")
     verts = np.array(tm_mesh.vertices)
+    # center = (np.max(verts, axis=0) + np.min(verts, axis=0)) / 2
+    # length = np.linalg.norm(np.max(verts, axis=0) - np.min(verts, axis=0)) / 2
+    # tm_mesh.vertices = (verts - center[None]) / length
+
+    # 1. 计算中心点并平移到原点
     center = (np.max(verts, axis=0) + np.min(verts, axis=0)) / 2
-    length = np.linalg.norm(np.max(verts, axis=0) - np.min(verts, axis=0)) / 2
-    tm_mesh.vertices = (verts - center[None]) / length
+    verts_centered = verts - center[None]
+    
+    # 2. 计算物体在 XYZ 三个轴向上的最大真实跨度 (比如杯子的高度或盘子的直径)
+    extents = np.max(verts, axis=0) - np.min(verts, axis=0)
+    max_extent = np.max(extents) # 找到最长的那一边
+    
+    # 3. 设定你期望的物理尺寸（单位：米）。例如 0.15 米 = 15 厘米
+    target_size = 0.1 
+    
+    # 4. 计算缩放比例并应用
+    scale_factor = target_size / max_extent
+    tm_mesh.vertices = verts_centered * scale_factor
     tm_mesh.export(output_path)
     return
 
