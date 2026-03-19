@@ -3,7 +3,7 @@
 *.bat
 *.p
 *.mlx
-
+vtk/*
 *#
 *logs
 # Byte-compiled / optimized / DLL files
