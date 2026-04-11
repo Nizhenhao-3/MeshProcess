@@ -210,3 +210,6 @@ third_party/ACVD/*
 objaverse/*
 vtk/*
 objaverse/
+dataset/*
+dataset/
+vtk/

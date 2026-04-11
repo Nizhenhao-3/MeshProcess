@@ -73,8 +73,12 @@ def get_tabletop_pose(config):
     spec.worldbody.add_geom(
         name="floor", type=mujoco.mjtGeom.mjGEOM_PLANE, size=[0, 0, 1.0]
     )
+    spec.worldbody.add_light(
+        name="sun", pos=[0, 0, 1], dir=[0, 0, -1], directional=True, 
+        diffuse=[0.8, 0.8, 0.8], specular=[0.2, 0.2, 0.2]
+    )
     spec.worldbody.add_camera(
-        name="closeup", pos=[0.0, 1.0, 1.0], xyaxes=[-1, 0, 0, 0, -1, 1]
+        name="closeup", pos=[0.0, 0.05, 0.05], xyaxes=[-1, 0, 0, 0, -1, 1]
     )
     for m in spec.meshes:
         m.scale = [scale, scale, scale]
@@ -111,7 +115,7 @@ def get_tabletop_pose(config):
 
             if debug_vis_path is not None and i % 20 == 0:
                 renderer.update_scene(data, "closeup")
-                pixels = renderer.render()
+                pixels = renderer.render().copy()
                 frames.append(pixels)
 
         final_object_qpos = deepcopy(data.qpos)
@@ -126,7 +130,7 @@ def get_tabletop_pose(config):
                 mujoco.mj_step(model, data)
                 if debug_vis_path is not None and j % 50 == 0:
                     renderer.update_scene(data, "closeup")
-                    pixels = renderer.render()
+                    pixels = renderer.render().copy()
                     frames.append(pixels)
             delta_angle, _ = batched_quat_delta(data.qpos[3:], final_object_qpos[3:])
             delta_trans = np.linalg.norm(data.qpos[:3] - final_object_qpos[:3])
